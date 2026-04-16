@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}EduTube+ | Create Account{% endblock %}
+{% block main_padding %}pb-10{% endblock %}
+{% block header %}
+  <header class="bg-[#fbf9f8] font-['Manrope'] tracking-tight docked full-width top-0 sticky z-40">
+    <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+      <div class="flex items-center gap-3">
+        <a class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-lowest transition-transform duration-200 scale-95 active:scale-90 flex items-center justify-center" href="/login/">
+          <span class="material-symbols-outlined text-stone-600">school</span>
+        </a>
+        <a href="/login/" aria-label="Home">
+          <h1 class="text-2xl font-black tracking-tighter text-[#1b1c1c]">EduTube+</h1>
+        </a>
+      </div>
+    </div>
+    <div class="bg-[#f6f3f2] h-px w-full block"></div>
+  </header>
+{% endblock %}
+{% block bottom_nav %}{% endblock %}
+
+{% block content %}
+  <section class="px-6 pt-10 pb-8 max-w-lg mx-auto">
+    <div>
+      <div class="text-sm font-extrabold tracking-tight text-primary">EduTube+</div>
+      <h2 class="mt-2 text-4xl font-black tracking-tighter">Create Account</h2>
+      <p class="mt-2 text-on-surface-variant font-medium">Start building a curated learning library.</p>
+    </div>
+
+    <div class="mt-8 rounded-[28px] bg-surface-container-lowest shadow-[0_24px_60px_rgba(182,23,34,0.06)] p-6">
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+
+        <div>
+          <label class="block text-xs font-extrabold tracking-widest text-on-surface-variant uppercase">Full Name</label>
+          <input name="name" type="text" placeholder="Enter your full name" class="mt-2 w-full rounded-2xl bg-surface-container-low border-0 py-4 px-4 text-base font-semibold placeholder:text-stone-400 focus:ring-2 focus:ring-primary/30" required />
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold tracking-widest text-on-surface-variant uppercase">Email Address</label>
+          <input name="email" type="email" placeholder="Enter your email address" class="mt-2 w-full rounded-2xl bg-surface-container-low border-0 py-4 px-4 text-base font-semibold placeholder:text-stone-400 focus:ring-2 focus:ring-primary/30" required />
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold tracking-widest text-on-surface-variant uppercase">Password</label>
+          <input name="password" type="password" placeholder="Create a password" class="mt-2 w-full rounded-2xl bg-surface-container-low border-0 py-4 px-4 text-base font-semibold placeholder:text-stone-400 focus:ring-2 focus:ring-primary/30" required />
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold tracking-widest text-on-surface-variant uppercase">Confirm Password</label>
+          <input name="password2" type="password" placeholder="Confirm your password" class="mt-2 w-full rounded-2xl bg-surface-container-low border-0 py-4 px-4 text-base font-semibold placeholder:text-stone-400 focus:ring-2 focus:ring-primary/30" required />
+        </div>
+
+        <button type="submit" class="w-full rounded-2xl py-4 font-extrabold tracking-tight text-white bg-gradient-to-r from-primary to-primary-container shadow-[0_16px_40px_rgba(182,23,34,0.18)] active:scale-[0.99] transition">
+          <span class="inline-flex items-center justify-center gap-2">
+            Create Account <span class="material-symbols-outlined">person_add</span>
+          </span>
+        </button>
+      </form>
+
+      <p class="mt-6 text-sm font-semibold text-center text-on-surface-variant">
+        Already have an account? <a class="text-primary font-extrabold" href="/login/">Sign In</a>
+      </p>
+    </div>
+  </section>
+{% endblock %}

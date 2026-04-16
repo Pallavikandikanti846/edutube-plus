@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}EduTube+ | Settings{% endblock %}
+
+{% block content %}
+  <section class="px-4 sm:px-6 pt-6 pb-24 max-w-xl mx-auto">
+    <div class="flex items-center gap-3 mb-8">
+      <a href="/profile/" class="hover:bg-stone-100 p-2 rounded-full transition-colors active:scale-95">
+        <span class="material-symbols-outlined text-stone-500">arrow_back</span>
+      </a>
+      <h2 class="text-2xl font-extrabold tracking-tight">Settings</h2>
+    </div>
+
+    <div class="space-y-6">
+
+      <div class="rounded-2xl bg-surface-container-lowest shadow-sm p-6">
+        <h3 class="text-base font-bold tracking-tight mb-4">Update Name</h3>
+        <form method="post" action="/settings/update-name/" class="flex gap-3 items-end">
+          {% csrf_token %}
+          <div class="flex-1">
+            <label for="first_name" class="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-1.5">Display Name</label>
+            <input type="text" id="first_name" name="first_name"
+                   value="{% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}"
+                   class="w-full rounded-xl border border-surface-variant bg-white px-4 py-2.5 text-sm font-semibold tracking-tight focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                   required>
+          </div>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-bold tracking-tight hover:bg-primary-container transition-colors active:scale-95">
+            Save
+          </button>
+        </form>
+      </div>
+
+      <div class="rounded-2xl bg-surface-container-lowest shadow-sm p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-base font-bold tracking-tight">Watch History</h3>
+            <p class="text-xs font-medium text-on-surface-variant mt-1">
+              {% if history_paused %}
+                Your watch history is paused. New videos won't be saved.
+              {% else %}
+                Your watch history is being recorded.
+              {% endif %}
+            </p>
+          </div>
+          <form method="post" action="/settings/toggle-history/">
+            {% csrf_token %}
+            <button type="submit" class="relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/30 {% if history_paused %}bg-stone-300{% else %}bg-primary{% endif %}">
+              <span class="absolute top-0.5 {% if history_paused %}left-0.5{% else %}left-[22px]{% endif %} w-6 h-6 bg-white rounded-full shadow transition-all duration-200"></span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-surface-container-lowest shadow-sm p-6">
+        <h3 class="text-base font-bold tracking-tight text-red-600">Danger Zone</h3>
+        <p class="text-xs font-medium text-on-surface-variant mt-1 mb-4">
+          Permanently delete your account and all associated data. This action cannot be undone.
+        </p>
+        <form method="post" action="/settings/delete-account/" id="delete-form">
+          {% csrf_token %}
+          <button type="button" onclick="confirmDelete()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-red-200 text-red-600 text-sm font-bold tracking-tight hover:bg-red-50 transition-colors active:scale-95">
+            <span class="material-symbols-outlined text-sm">delete_forever</span>
+            Delete Account
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    function confirmDelete() {
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        document.getElementById('delete-form').submit();
+      }
+    }
+  </script>
+{% endblock %}

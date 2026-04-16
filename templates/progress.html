@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}EduTube+ | Progress{% endblock %}
+
+{% block content %}
+  <section class="px-4 sm:px-6 pt-6 pb-10 max-w-3xl mx-auto">
+    <div>
+      <div class="text-xs font-bold uppercase tracking-widest text-primary">Your Learning Journey</div>
+      <h2 class="mt-2 text-4xl font-black tracking-tighter leading-[1.05]">Overall<br>Progress</h2>
+    </div>
+
+    <div class="mt-4">
+      <div class="text-5xl font-black tracking-tighter text-primary">
+        {{ overall_percent }}<span class="text-2xl align-top">%</span>
+      </div>
+      <div class="mt-4 h-2 rounded-full bg-on-surface/10 overflow-hidden">
+        <div class="h-full bg-primary progress-fill" data-width="{{ overall_percent }}"></div>
+      </div>
+
+    <div class="mt-6 grid grid-cols-2 gap-4">
+      <div class="rounded-3xl bg-surface-container-lowest shadow-sm p-5">
+        <div class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Courses Active</div>
+        <div class="mt-2 text-2xl font-black tracking-tighter">{{ progress_items|length }}</div>
+      </div>
+
+      <div class="rounded-3xl bg-surface-container-lowest shadow-sm p-5">
+        <div class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Hours Studied</div>
+        <div class="mt-2 text-2xl font-black tracking-tighter">{{ hours_studied }}</div>
+      </div>
+
+      <div class="rounded-3xl bg-surface-container-lowest shadow-sm p-5">
+        <div class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Completed</div>
+        <div class="mt-2 text-2xl font-black tracking-tighter text-primary">{{ completed_count }}</div>
+      </div>
+
+      <div class="rounded-3xl bg-surface-container-lowest shadow-sm p-5">
+        <div class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Certificates</div>
+        <div class="mt-2 text-2xl font-black tracking-tighter">--</div>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <h3 class="text-xl font-extrabold tracking-tight">Continue Watching</h3>
+
+      {% if progress_items %}
+        {% for item in progress_items %}
+          {% if forloop.first %}
+            <a href="/video_player/?db_video_id={{ item.video_id }}" class="mt-4 block rounded-3xl overflow-hidden bg-surface-container-lowest shadow-sm hover:shadow-md transition">
+              <div class="relative h-32 sm:h-40 bg-black/80">
+                <div class="absolute inset-0 opacity-35" style="background: radial-gradient(circle at 30% 30%, rgba(182,23,34,0.65), transparent 55%);"></div>
+                <div class="absolute inset-0 p-5 flex flex-col justify-between">
+                  <div class="text-white text-xl font-black tracking-tighter leading-tight">{{ item.title }}</div>
+                  <div class="flex items-center justify-between text-white/90 text-xs font-semibold">
+                    <span>{{ item.progress_percent }}% Progress</span>
+                    <span>{{ item.watched_seconds }}s watched</span>
+                  </div>
+                  <div class="h-1.5 rounded-full bg-white/20 overflow-hidden">
+                    {% if progress_items %}
+                      <div class="h-full bg-primary progress-fill" data-width="{{ progress_items.0.progress_percent|default:0|floatformat:0 }}"></div>
+                    {% else %}
+                      <div class="h-full bg-primary progress-fill" data-width="0"></div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+
+        <div class="mt-4 space-y-3">
+          {% for item in progress_items %}
+            <a href="/video_player/?db_video_id={{ item.video_id }}" class="rounded-3xl bg-surface-container-lowest shadow-sm p-4 flex items-center gap-4 hover:shadow-md transition">
+              <div class="w-16 h-10 rounded-xl bg-surface-variant flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">play_arrow</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-extrabold tracking-tight truncate">{{ item.title }}</div>
+                <div class="text-xs font-semibold text-on-surface-variant">{{ item.progress_percent }}% complete</div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="mt-4 rounded-3xl bg-surface-container-lowest shadow-sm p-6">
+          <p class="text-sm font-semibold text-on-surface-variant">No progress found yet.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="mt-10">
+      <div class="flex items-end justify-between">
+        <h3 class="text-xl font-extrabold tracking-tight">Learning History</h3>
+        <a href="/profile/" class="text-xs font-bold uppercase tracking-widest text-primary">View All</a>
+      </div>
+
+      <div class="mt-4 space-y-3">
+        {% for item in progress_items %}
+          <div class="rounded-3xl bg-surface-container-lowest shadow-sm p-4 flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full {% if item.is_completed %}bg-primary/10{% else %}bg-on-surface/5{% endif %} flex items-center justify-center">
+              <span class="material-symbols-outlined {% if item.is_completed %}text-primary{% else %}text-stone-400{% endif %} text-base">
+                {% if item.is_completed %}check_circle{% else %}radio_button_unchecked{% endif %}
+              </span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-extrabold tracking-tight">{{ item.title }}</div>
+              <div class="mt-1 text-xs font-semibold text-on-surface-variant">Progress: {{ item.progress_percent }}%</div>
+              <div class="mt-1 text-xs font-semibold text-on-surface-variant">Last accessed {{ item.last_watched_at }}</div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="rounded-3xl bg-surface-container-lowest shadow-sm p-4">
+            <div class="text-sm font-extrabold tracking-tight">No learning history yet</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".progress-fill").forEach(function (bar) {
+      const width = bar.dataset.width || "0";
+      bar.style.width = width + "%";
+    });
+  });
+</script>
+{% endblock %}

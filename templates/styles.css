@@ -1,0 +1,9 @@
+:root{
+  --primary: #b61722;
+  --on-surface: #1b1c1c;
+}
+
+body{
+  min-height: max(884px, 100dvh);
+}
+

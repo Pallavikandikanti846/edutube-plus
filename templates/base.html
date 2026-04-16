@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}EduTube+{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#b61722",
+              surface: "#fbf9f8",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f6f3f2",
+              "surface-variant": "#e4e2e1",
+              "on-surface": "#1b1c1c",
+              "on-surface-variant": "#5b403e",
+              "outline-variant": "#e4beba",
+              "secondary-container": "#ff8982",
+              "primary-container": "#da3437",
+            },
+            fontFamily: {
+              body: ["Manrope"],
+              headline: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-surface text-on-surface selection:bg-primary/20 antialiased">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-3 focus:left-3 focus:bg-white focus:text-on-surface focus:px-4 focus:py-2 focus:rounded-xl focus:shadow">
+      Skip to content
+    </a>
+    {% block header %}
+      <header class="bg-[#fbf9f8] font-['Manrope'] tracking-tight docked full-width top-0 sticky z-40">
+        <div class="flex justify-between items-center w-full px-4 sm:px-6 py-4 max-w-7xl mx-auto">
+          <div class="flex items-center gap-3">
+            <a class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-lowest transition-transform duration-200 scale-95 active:scale-90 flex items-center justify-center" href="/search/">
+              <span class="material-symbols-outlined text-stone-600">school</span>
+            </a>
+            <a href="/search/" aria-label="Home">
+              <h1 class="text-2xl font-black tracking-tighter text-[#1b1c1c]">EduTube+</h1>
+            </a>
+          </div>
+
+        </div>
+        <div class="bg-[#f6f3f2] h-px w-full block"></div>
+      </header>
+    {% endblock %}
+
+    {% if messages %}
+      <div class="px-6 pt-4 max-w-3xl mx-auto space-y-2">
+        {% for message in messages %}
+          <div class="rounded-xl shadow-sm px-4 py-3 text-sm font-semibold tracking-tight {% if message.tags and 'error' in message.tags %}bg-red-50 text-red-700 border border-red-200{% elif message.tags and 'success' in message.tags %}bg-green-50 text-green-700 border border-green-200{% else %}bg-white text-on-surface{% endif %}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <main id="main-content" class="{% block main_padding %}pb-28{% endblock %}">
+      {% block content %}{% endblock %}
+    </main>
+
+    {% block bottom_nav %}
+      <nav class="fixed bottom-0 left-0 w-full z-50 bg-surface">
+        <div class="flex justify-around items-center px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 max-w-7xl mx-auto">
+          {% with path=request.path %}
+          <a class="flex flex-col items-center justify-center transition-all group outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 active:outline-none active:ring-0 rounded-2xl px-3 py-1 {% if path|slice:':8' == '/search/' %}text-primary opacity-100{% else %}text-stone-400 opacity-70 hover:text-[#b61722]{% endif %}" href="/search/" aria-current="{% if path|slice:':8' == '/search/' %}page{% endif %}">
+            <span class="material-symbols-outlined text-xl mb-0.5" style="{% if path|slice:':8' == '/search/' %}font-variation-settings: 'FILL' 1;{% endif %}">search</span>
+            <span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-wide">Search</span>
+          </a>
+          <a class="flex flex-col items-center justify-center transition-all group outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 active:outline-none active:ring-0 rounded-2xl px-3 py-1 {% if path|slice:':10' == '/progress/' %}text-primary opacity-100{% else %}text-stone-400 opacity-70 hover:text-[#b61722]{% endif %}" href="/progress/" aria-current="{% if path|slice:':10' == '/progress/' %}page{% endif %}">
+            <span class="material-symbols-outlined text-xl mb-0.5" style="{% if path|slice:':10' == '/progress/' %}font-variation-settings: 'FILL' 1;{% endif %}">monitoring</span>
+            <span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-wide">Progress</span>
+          </a>
+          <a class="flex flex-col items-center justify-center transition-all group outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 active:outline-none active:ring-0 rounded-2xl px-3 py-1 {% if path|slice:':9' == '/profile/' %}text-primary opacity-100{% else %}text-stone-400 opacity-70 hover:text-[#b61722]{% endif %}" href="/profile/" aria-current="{% if path|slice:':9' == '/profile/' %}page{% endif %}">
+            <span class="material-symbols-outlined text-xl mb-0.5" style="{% if path|slice:':9' == '/profile/' %}font-variation-settings: 'FILL' 1;{% endif %}">person</span>
+            <span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-wide">Profile</span>
+          </a>
+          {% endwith %}
+        </div>
+      </nav>
+    {% endblock %}
+  </body>
+</html>
+
